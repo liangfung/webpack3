@@ -1,4 +1,6 @@
 const path = require('path')
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+
 module.exports = {
   entry: {
     entry: './src/entry.js',
@@ -8,11 +10,20 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js'
   },
-  module: {},
-  plugins: [],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      }
+    ]
+  },
+  plugins: [
+    new UglifyJSPlugin()
+  ],
   devServer: {
     contentBase: path.resolve(__dirname, 'dist'),
-    host: '172.17.5.17',
+    host: 'localhost',
     compress: true,
     port: 8787
   }
