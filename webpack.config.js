@@ -1,6 +1,11 @@
 const path = require('path')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const htmlPlugin = require('html-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+
+const website = {
+  PublicPath: 'localhost'
+}
 
 module.exports = {
   entry: {
@@ -8,13 +13,28 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js'
+    filename: '[name].js',
+    publicPath: website.PublicPath
   },
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader"
+        })
+      },
+      {
+        test: /\.(png|jpg|gif)/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 5000
+            }
+          }
+        ]
       }
     ]
   },
@@ -26,11 +46,11 @@ module.exports = {
       },
       hash: true,
       template: './src/index.html'
-    })
+    }),
+    new ExtractTextPlugin("/css/index.css")
   ],
   devServer: {
     contentBase: path.resolve(__dirname, 'dist'),
-    host: 'localhost',
     compress: true,
     port: 8787
   }
