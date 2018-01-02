@@ -4,7 +4,7 @@ const htmlPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 const website = {
-  PublicPath: 'localhost'
+  PublicPath: 'http://localhost:8787/'
 }
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
-    publicPath: website.PublicPath
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -47,10 +47,10 @@ module.exports = {
       hash: true,
       template: './src/index.html'
     }),
-    new ExtractTextPlugin("/css/index.css")
+    new ExtractTextPlugin("css/index.css")
   ],
   devServer: {
-    contentBase: path.resolve(__dirname, 'dist'),
+    contentBase: path.join(__dirname, 'dist'),
     compress: true,
     port: 8787
   }
